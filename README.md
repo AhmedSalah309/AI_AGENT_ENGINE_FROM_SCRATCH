@@ -25,6 +25,9 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   ├── __init__.py
 │   ├── test_message.py                  # Unit tests for the message model
 │   ├── test_conversation.py             # Unit tests for the conversation manager
+│   ├── test_token_manager.py            # Unit tests for the token manager
+│   ├── test_summarizer.py               # Unit tests for the summarizer
+│   ├── test_agent.py                    # Unit tests for the agent
 ├── logs/                                # Logs for the engine
 ├── infrastructure/                      # Infrastructure components (e.g., LLM clients)
 ├── .env.example                         # Example environment variables
@@ -69,4 +72,5 @@ cd AI_AGENT_ENGINE_FROM_SCRATCH
    - Handles streaming responses and token management.
    # Note:
 * More components like summarization, tool calling, memory, etc. are under development.
+
 
