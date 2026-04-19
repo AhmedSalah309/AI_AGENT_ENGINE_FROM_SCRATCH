@@ -1,10 +1,11 @@
 from flask import Flask, jsonify
+from prometheus_flask_exporter import PrometheusMetrics
+
+# Instead of from .routes use the full path
+from agent_engine.api.routes import chat_bp
 
 # Use the absolute path because it is clearer in the Clean Architecture
 from agent_engine.config.settings import settings
-# Instead of from .routes use the full path
-from agent_engine.api.routes import chat_bp
-from prometheus_flask_exporter import PrometheusMetrics
 
 
 def create_app():
@@ -34,4 +35,3 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(debug=True)
-

@@ -1,5 +1,7 @@
 import tiktoken
+
 from agent_engine.core.message import Message
+
 
 class TokenManager:
     def __init__(self, model_name: str = "gemma2b"):
@@ -21,15 +23,15 @@ class TokenManager:
     def count_message_tokens(self, message: Message) -> int:
         """
         Calculate the number of tokens in a single message including the Role.
-        Add 3 tokens as an average for the formatting of each message 
+        Add 3 tokens as an average for the formatting of each message
         (like <|im_start|> and <|im_end|>)
         """
         tokens_per_message = 3
         total_tokens = tokens_per_message
-        
+
         total_tokens += self.count_string_tokens(message.role)
         total_tokens += self.count_string_tokens(message.content)
-        
+
         return total_tokens
 
     def get_total_tokens(self, messages: list[Message]) -> int:
@@ -37,7 +39,7 @@ class TokenManager:
         total = 0
         for msg in messages:
             total += self.count_message_tokens(msg)
-        
+
         # Add 3 additional tokens as a prime for the next assistant response
         total += 3
         return total

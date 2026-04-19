@@ -1,13 +1,11 @@
-import os
-
 from pathlib import Path
 from typing import Literal
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
@@ -34,8 +32,6 @@ class Settings(BaseSettings):
     # Database Settings
     DATABASE_URL: str = "sqlite:///data/agent_engine.db"
 
-
-        
     # .env file settings
     model_config = SettingsConfigDict(
         env_file=str(BASE_DIR / ".env"),

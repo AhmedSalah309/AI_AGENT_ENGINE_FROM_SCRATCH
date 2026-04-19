@@ -1,30 +1,33 @@
-import requests
 import json
-from agent_engine.core.message import Message
-from agent_engine.config.logger import logger
-from agent_engine.config.settings import settings
 from typing import Optional
 
+import requests
+
+from agent_engine.config.logger import logger
+from agent_engine.config.settings import settings
+
+
 class Agent:
-    def __init__(self, name: str = "A-EIL Core Agent", system_prompt: Optional[str] = None):
+    def __init__(
+        self, name: str = "A-EIL Core Agent", system_prompt: Optional[str] = None
+    ):
         self.name = name
         self.system_prompt = system_prompt or "You are a helpful AI assistant."
-    
+
     def generate_stream(self, conversation):
         messages_payload = []
-        
+
         if self.system_prompt:
             messages_payload.append({"role": "system", "content": self.system_prompt})
-        
+
         # Use all messages, as the Conversation class manages the context (Sliding Window)
         recent_messages = conversation.messages
-        
+
         for msg in recent_messages:
             if msg.content and msg.role in ["user", "assistant"]:
-                messages_payload.append({
-                    "role": msg.role,
-                    "content": msg.content.strip()
-                })
+                messages_payload.append(
+                    {"role": msg.role, "content": msg.content.strip()}
+                )
 
         payload = {
             "model": settings.DEFAULT_MODEL,
@@ -34,15 +37,12 @@ class Agent:
                 "temperature": 0.7,
                 "num_predict": 512,
                 "top_p": 0.9,
-            }
+            },
         }
 
         try:
             response = requests.post(
-                settings.OLLAMA_BASE_URL,
-                json=payload,
-                stream=True,
-                timeout=60
+                settings.OLLAMA_BASE_URL, json=payload, stream=True, timeout=60
             )
             response.raise_for_status()
 
@@ -51,11 +51,11 @@ class Agent:
             for line in response.iter_lines():
                 if line:
                     try:
-                        data = json.loads(line.decode('utf-8'))
-                        
+                        data = json.loads(line.decode("utf-8"))
+
                         if data.get("done", False):
                             break
-                        
+
                         content = data.get("message", {}).get("content", "")
                         if content:
                             yield content
@@ -74,4 +74,3 @@ class Agent:
             error_msg = f"Error: {str(e)}"
             logger.error(error_msg)
             yield error_msg
-            

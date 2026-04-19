@@ -99,4 +99,3 @@ def test_to_log_format(valid_message_data):
     assert "[USER]" in log_str
     assert "Hello, Agent!" in log_str
     assert "10 tokens" in log_str
-    
