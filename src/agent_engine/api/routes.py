@@ -19,7 +19,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from agent_engine.core.agent import Agent
 from agent_engine.core.conversation import Conversation
 from agent_engine.core.message import Message
-from agent_engine.infrastructure.database.sql_repository import SQLRepository
+from agent_engine.database.sql_repository import SQLRepository
 
 chat_bp = Blueprint("chat", __name__, template_folder="templates", url_prefix="/api/v1")
 storage = SQLRepository()
