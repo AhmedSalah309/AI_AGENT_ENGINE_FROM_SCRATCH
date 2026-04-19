@@ -12,6 +12,8 @@ This engine is designed to handle message state, token limits, and AI conversati
 * **Communication:** RESTful API (JSON)
 * **WebFramework:** Flask 3.0.2
 * **WSGI Server:** Gunicorn
+* **Monitoring:** Prometheus, Grafana
+* **Reverse Proxy:** Nginx
 
 ### API Endpoints
 
@@ -24,6 +26,14 @@ To reach the API, prefix the endpoint with your active base URL (e.g., `http://l
 | `POST` | `/api/v1/chat/<session_id>` | Core conversational Agent engine (Streams SSE responses). |
 | `GET`  | `/metrics` | Exposed Prometheus metrics for the Grafana dashboard. |
 | `GET`  | `/apidocs` | Swagger UI Documentation *(Coming Soon)* |
+
+## Ports & Networking Stack
+
+| Service | Local Dev Mode (`make run-dev`) | Docker Mode (`make docker-up`) |
+|---------|---------------------------------|--------------------------------|
+| **Core Web App** | `http://localhost:8002` | `http://localhost:8001` (via Nginx Gateway) |
+| **Prometheus** | Not Available | `http://localhost:9091` |
+| **Grafana** | Not Available | `http://localhost:3001` (Login: admin/admin) |
 
 ##  Project Structure
 ```text
@@ -59,7 +69,14 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   └── test_agent.py                    # Unit tests for the agent
 │   
 ├── logs/                                # Logs for the engine
-├── infrastructure/                      # Infrastructure components (e.g., LLM clients)
+│
+├── infrastructure/                      # Infrastructure components 
+│   ├── grafana/                         # Grafana 
+│   │   └── grafana.ini                  # Grafana configuration
+│   ├── nginx/                           # Nginx 
+│   │   └── nginx.conf                   # Nginx configuration
+│   └── prometheus/                      # Prometheus 
+│       └── prometheus.yml               # Prometheus configuration
 │
 ├── .env.example                         # Example environment variables
 ├── .gitignore                           # Git ignore file
@@ -161,5 +178,6 @@ make run
    - Handles streaming responses and token management.
    # Note:
 * More components like summarization, tool calling, memory, etc. are under development.
+
 
 

@@ -5,6 +5,7 @@ flask==3.0.2
 pydantic-settings==2.2.1
 python-dotenv==1.0.1
 gunicorn==25.3.0
+prometheus-flask-exporter==0.23.1
 
 # Testing tools
 pytest==8.4.2
