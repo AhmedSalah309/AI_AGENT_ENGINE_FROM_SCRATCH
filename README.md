@@ -7,25 +7,25 @@ This engine is designed to handle message state, token limits, and AI conversati
 * **Validation:** Pydantic V2
 
 ##  Project Structure
-
+```text
 AI_AGENT_ENGINE_FROM_SCRATCH/
 │
 ├── src/
 │   ├── agent_engine/
 │   │   ├── __init__.py
-│   │   ├── core/
+│   │   ├── core/                        # Core components of the engine
 │   │   │   ├── __init__.py
-│   │   │   ├── message.py
-│   │   │   ├── conversation.py
-├── test/
-├── infrastructure/
-├── .env.example
-├── .gitignore
-├── README.md
-├── requirments.txt
-├── Makefile
-└── LICENSE
-
+│   │   │   ├── message.py               # Message model
+│   │   │   ├── conversation.py          # Conversation manager
+├── test/                                # Unit tests for the engine
+├── infrastructure/                      # Infrastructure components (e.g., LLM clients)
+├── .env.example                         # Example environment variables
+├── .gitignore                           # Git ignore file
+├── README.md                            # Project documentation
+├── requirments.txt                      # Environmented dependencies
+├── Makefile                             # Makefile for common tasks
+└── LICENSE                              # License file
+```
 # Getting started
 ## clone the repo
 ```Bash
