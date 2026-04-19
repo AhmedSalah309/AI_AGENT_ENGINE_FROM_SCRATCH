@@ -3,10 +3,27 @@ End-To-End robust enterprise-grade GenAI Agent Engine built from scratch [No Lan
 This engine is designed to handle message state, token limits, and AI conversational flow with strict data validation. 
 
 ## Tech Stack
+* **Environment:** WSL (Ubuntu)
 * **Language:** Python 3.11+
 * **Validation:** Pydantic V2
 * **Testing:** Pytest, `pytest-cov`, `pytest-xdist`, `pytest-mock` & Hypothesis
 * **Code Quality:** Black (Formatting), Ruff (Linting), MyPy (Static Type Checking)
+* **AI Model:** Google Gemma:2b (via Ollama)
+* **Communication:** RESTful API (JSON)
+* **WebFramework:** Flask 3.0.2
+* **WSGI Server:** Gunicorn
+
+### API Endpoints
+
+To reach the API, prefix the endpoint with your active base URL (e.g., `http://localhost:8002`).
+
+| Method | Endpoint Blueprint | Description |
+|--------|--------------------|-------------|
+| `GET`  | `/health` | Application health status and current configuration version. |
+| `GET`  | `/api/v1/chat/<session_id>` | HTML Frontend Chat UI. |
+| `POST` | `/api/v1/chat/<session_id>` | Core conversational Agent engine (Streams SSE responses). |
+| `GET`  | `/metrics` | Exposed Prometheus metrics for the Grafana dashboard. |
+| `GET`  | `/apidocs` | Swagger UI Documentation *(Coming Soon)* |
 
 ##  Project Structure
 ```text
@@ -15,22 +32,35 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 ├── src/
 │   ├── agent_engine/
 │   │   ├── __init__.py
+│   │   ├── api/                         # API components
+│   │   │   ├── __init__.py
+│   │   │   ├── templates/               # API templates
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── index.html           # API index template
+│   │   │   │
+│   │   │   ├── main.py                  # Main API file
+│   │   │   ├── routes.py                # API routes
+│   │   │   └── schemas.py               # API schemas
+│   │   │
 │   │   ├── core/                        # Core components of the engine
 │   │   │   ├── __init__.py
 │   │   │   ├── message.py               # Message model
 │   │   │   ├── conversation.py          # Conversation manager
 │   │   │   ├── summarizer.py            # Summarizer component
 │   │   │   ├── token_manager.py         # Token manager component
-│   │   │   ├── agent.py                 # Agent component
+│   │   │   └── agent.py                 # Agent component
+│   │   │   
 ├── test/                                # Unit tests for the engine    
 │   ├── __init__.py
 │   ├── test_message.py                  # Unit tests for the message model
 │   ├── test_conversation.py             # Unit tests for the conversation manager
 │   ├── test_token_manager.py            # Unit tests for the token manager
 │   ├── test_summarizer.py               # Unit tests for the summarizer
-│   ├── test_agent.py                    # Unit tests for the agent
+│   └── test_agent.py                    # Unit tests for the agent
+│   
 ├── logs/                                # Logs for the engine
 ├── infrastructure/                      # Infrastructure components (e.g., LLM clients)
+│
 ├── .env.example                         # Example environment variables
 ├── .gitignore                           # Git ignore file
 ├── README.md                            # Project documentation
@@ -44,6 +74,64 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 git clone https://github.com/AhmedSalah309/AI_AGENT_ENGINE_FROM_SCRATCH.git
 cd AI_AGENT_ENGINE_FROM_SCRATCH
 ```
+
+# 1. Local AI Model Setup (Prerequisite)
+* **Since this project uses a local LLM (Google Gemma:2b)** : you need to set up the ollama environment first inside your WSL environment.
+* **1. Install Ollama in WSL**
+Run the following command in your WSL terminal:
+```Bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+- **Note on permission:** when prompted for `[sudo] password`, enter your Linux user password.
+
+* **Troubleshooting : Forgot Linux password?**
+if you don't know your linux password, follow these steps in **Windows PowerShell** (not WSL):
+1. **close all WSL terminals**
+2. **open PowerShell as administrator and set the default user to root:**
+```powershell
+wsl -u root
+```
+3. **Inside the root terminal, run the following command to reset the password:**
+```bash
+passwd <your-wsl-username>
+```
+4. **Exit and set the default user back(optional):**
+```bash
+wsl --set-default-user <your-username>
+```
+* **5. Download & Run Gemma 2B Model**
+```bash
+ollama run gemma:2b # I used this model, you can use any other model like (llama3,mistral,phi3,etc)
+```
+* The first time you run this command, it will take some time to download the model it depends on your internet speed and the model size.
+* **To exit the model interface** : Type `/bye` and press `Enter`.
+* **To stop the ollama service** : it will run in the background.if you need to stop it,but you can still use it in the background, run the following command:
+```bash
+ollama stop
+```
+* **To run the ollama service again**, run the following command:
+```bash
+ollama run gemma:2b # or any other model name you downloaded
+```
+* **but if you want to end the ollama service completely**, run the following command:
+```bash
+sudo systemctl stop ollama
+```
+* **To start the ollama service again**, run the following command:
+```bash
+sudo systemctl start ollama
+```
+
+### 3.Running the Server
+* Start the Flask development server with auto reload
+```Bash
+make run
+```
+* The server will be live at `http://localhost:8000`
+* Health check endpoint: `http://localhost:8000/health`
+* Chat endpoint: `http://localhost:8000/api/v1/chat/test_session`
+* Swagger UI: `http://localhost:8000/apidocs`
+
 
 ## Core Components (Current Scope)
 1. **`Message` Model (`src/agent_engine/core/message.py`)**
