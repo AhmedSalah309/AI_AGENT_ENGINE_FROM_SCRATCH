@@ -32,7 +32,7 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 # Getting started
 ## clone the repo
 ```Bash
-git clone <https://github.com/AhmedSalah309/AI_AGENT_ENGINE_FROM_SCRATCH.git>
+git clone https://github.com/AhmedSalah309/AI_AGENT_ENGINE_FROM_SCRATCH.git
 cd AI_AGENT_ENGINE_FROM_SCRATCH
 ```
 
