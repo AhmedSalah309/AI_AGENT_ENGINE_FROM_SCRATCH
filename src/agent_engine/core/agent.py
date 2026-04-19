@@ -20,7 +20,7 @@ class Agent:
         if self.system_prompt:
             messages_payload.append({"role": "system", "content": self.system_prompt})
 
-        # Use all messages, as the Conversation class manages the context (Sliding Window)
+        # Use all messages, as the Conversation class manages the context
         recent_messages = conversation.messages
 
         for msg in recent_messages:

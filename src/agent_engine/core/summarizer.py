@@ -10,7 +10,7 @@ class Summarizer:
         self.max_context_tokens = max_context_tokens
 
     def should_summarize(self, messages: List[Message]) -> bool:
-        """Determine if the conversation needs to be summarized based on the maximum limit"""
+        """Determine if the conversation needs to be summarized based on limit"""
         total_tokens = self.token_manager.get_total_tokens(messages)
         return total_tokens > self.max_context_tokens
 

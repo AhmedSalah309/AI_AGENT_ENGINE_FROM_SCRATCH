@@ -59,7 +59,8 @@ def chat(session_id):
             for chunk in default_agent.generate_stream(conv):
                 if chunk:
                     full_response += chunk
-                    yield f"data: {json.dumps({'content': chunk}, ensure_ascii=False)}\n\n"
+                    chunk_json = json.dumps({"content": chunk}, ensure_ascii=False)
+                    yield f"data: {chunk_json}\n\n"
 
             # Save assistant message after the stream is completed
             if full_response.strip():

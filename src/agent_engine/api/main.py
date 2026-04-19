@@ -10,7 +10,7 @@ from agent_engine.config.settings import settings
 
 def create_app():
     app = Flask(__name__)
-    metrics = PrometheusMetrics(app)
+    PrometheusMetrics(app)
 
     # Load settings from settings class
     app.config.from_object(settings)
