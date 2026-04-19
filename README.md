@@ -17,7 +17,10 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   │   │   ├── __init__.py
 │   │   │   ├── message.py               # Message model
 │   │   │   ├── conversation.py          # Conversation manager
-├── test/                                # Unit tests for the engine
+├── test/                                # Unit tests for the engine    
+│   ├── __init__.py
+│   ├── test_message.py                  # Unit tests for the message model
+│   ├── test_conversation.py             # Unit tests for the conversation manager
 ├── infrastructure/                      # Infrastructure components (e.g., LLM clients)
 ├── .env.example                         # Example environment variables
 ├── .gitignore                           # Git ignore file
