@@ -251,3 +251,4 @@ bench/bench
 deno.lock
 bun.lockb
 .DS_Store
+data/agent_engine.db
