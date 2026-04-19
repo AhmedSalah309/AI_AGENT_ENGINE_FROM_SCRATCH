@@ -16,6 +16,7 @@ This engine is designed to handle message state, token limits, and AI conversati
 * **Reverse Proxy:** Nginx
 * **Database:** SQLite (Local) via SQLAlchemy ORM
 * **Migrations:** Alembic
+* **Task/Message Queue:** Redis, Celery
 
 ### API Endpoints
 
@@ -36,6 +37,8 @@ To reach the API, prefix the endpoint with your active base URL (e.g., `http://l
 | **Core Web App** | `http://localhost:8002` | `http://localhost:8001` (via Nginx Gateway) |
 | **Prometheus** | Not Available | `http://localhost:9091` |
 | **Grafana** | Not Available | `http://localhost:3001` (Login: admin/admin) |
+| **Redis** | Not Available | `localhost:6380` |
+| **Celery** | Not Available | `localhost:5555` |
 
 ##  Project Structure
 ```text
@@ -60,7 +63,9 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   │   │   ├── conversation.py          # Conversation manager
 │   │   │   ├── summarizer.py            # Summarizer component
 │   │   │   ├── token_manager.py         # Token manager component
-│   │   │   └── agent.py                 # Agent component
+│   │   │   ├── agent.py                 # Agent component
+│   │   │   ├── celery_app.py            # Celery Application
+│   │   │   └── tasks.py                 # Celery Tasks
 │   │   │   
 │   │   ├── database/                    # Database Layer 
 │   │   │   ├── __init__.py
