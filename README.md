@@ -14,6 +14,8 @@ This engine is designed to handle message state, token limits, and AI conversati
 * **WSGI Server:** Gunicorn
 * **Monitoring:** Prometheus, Grafana
 * **Reverse Proxy:** Nginx
+* **Database:** SQLite (Local) via SQLAlchemy ORM
+* **Migrations:** Alembic
 
 ### API Endpoints
 
@@ -60,6 +62,17 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   │   │   ├── token_manager.py         # Token manager component
 │   │   │   └── agent.py                 # Agent component
 │   │   │   
+│   │   ├── database/                    # Database Layer 
+│   │   │   ├── __init__.py
+│   │   │   ├── models.py                # Database Models (Tables)
+│   │   │   ├── session.py               # Database connection
+│   │   │   └── sql_repository.py        # SQL Repository (file storage)
+│   │   │
+│   │   ├── config/                      # Configuration Layer
+│   │   │   ├── __init__.py
+│   │   │   ├── settings.py              # Settings Configuration
+│   │   │   └── logger.py                # Logger Configuration
+│
 ├── test/                                # Unit tests for the engine    
 │   ├── __init__.py
 │   ├── test_message.py                  # Unit tests for the message model

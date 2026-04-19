@@ -6,6 +6,9 @@ pydantic-settings==2.2.1
 python-dotenv==1.0.1
 gunicorn==25.3.0
 prometheus-flask-exporter==0.23.1
+sqlalchemy==2.0.36
+alembic==1.13.1
+psycopg2-binary==2.9.11
 
 # Testing tools
 pytest==8.4.2
