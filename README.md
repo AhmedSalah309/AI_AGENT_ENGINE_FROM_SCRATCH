@@ -6,6 +6,7 @@ This engine is designed to handle message state, token limits, and AI conversati
 * **Language:** Python 3.11+
 * **Validation:** Pydantic V2
 * **Testing:** Pytest, `pytest-cov`, `pytest-xdist`, `pytest-mock` & Hypothesis
+* **Code Quality:** Black (Formatting), Ruff (Linting), MyPy (Static Type Checking)
 
 ##  Project Structure
 ```text
