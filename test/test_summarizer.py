@@ -1,8 +1,8 @@
 import pytest
 
-from src.agent_engine.core.message import Message
-from src.agent_engine.core.summarizer import Summarizer
-from src.agent_engine.core.token_manager import TokenManager
+from agent_engine.core.message import Message
+from agent_engine.core.summarizer import Summarizer
+from agent_engine.core.token_manager import TokenManager
 
 
 @pytest.fixture

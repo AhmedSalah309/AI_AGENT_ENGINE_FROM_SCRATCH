@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from typing import Any
 from prometheus_flask_exporter import PrometheusMetrics
 
 # Instead of from .routes use the full path
@@ -8,7 +9,7 @@ from agent_engine.api.routes import chat_bp
 from agent_engine.config.settings import settings
 
 
-def create_app():
+def create_app() -> Flask:
     app = Flask(__name__)
     PrometheusMetrics(app)
 
@@ -19,7 +20,7 @@ def create_app():
     app.register_blueprint(chat_bp, url_prefix="/api/v1")
 
     @app.route("/health", methods=["GET"])
-    def health_check():
+    def health_check() -> Any:
         return jsonify(
             {
                 "status": "healthy",

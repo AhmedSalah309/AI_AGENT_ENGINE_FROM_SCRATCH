@@ -8,7 +8,7 @@ if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
 
 
-def setup_logger(name="AgentEngine"):
+def setup_logger(name: str = "AgentEngine") -> logging.Logger:
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)  # capture everything in development
 

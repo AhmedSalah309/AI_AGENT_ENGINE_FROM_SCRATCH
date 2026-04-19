@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Optional, Iterator, Any
 
 import requests
 
@@ -14,7 +14,7 @@ class Agent:
         self.name = name
         self.system_prompt = system_prompt or "You are a helpful AI assistant."
 
-    def generate_stream(self, conversation):
+    def generate_stream(self, conversation: Any) -> Iterator[str]:
         messages_payload = []
 
         if self.system_prompt:

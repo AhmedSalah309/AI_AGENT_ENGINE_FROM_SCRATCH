@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 from agent_engine.core.conversation import Conversation
 from agent_engine.core.message import Message
@@ -7,7 +7,7 @@ from agent_engine.database.session import SessionLocal
 
 
 class SQLRepository:
-    def save(self, session_id: str, conversation: Conversation):
+    def save(self, session_id: str, conversation: Conversation) -> None:
         db = SessionLocal()
         try:
             # Check if the session exists or create it
@@ -57,8 +57,11 @@ class SQLRepository:
             )
 
             for m in messages:
+                role_val: Any = m.role
+                content_val: Any = m.content
+                tokens_val: Any = m.tokens
                 conv.messages.append(
-                    Message(role=m.role, content=m.content, tokens=m.tokens)
+                    Message(role=role_val, content=content_val, tokens=tokens_val)
                 )
 
             return conv

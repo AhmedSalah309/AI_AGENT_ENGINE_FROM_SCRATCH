@@ -11,6 +11,7 @@ from flask import (
     request,
     stream_with_context,
 )
+from typing import Iterator, Any
 
 # Add the path to the project
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -26,7 +27,7 @@ default_agent = Agent()
 
 
 @chat_bp.route("/chat/<session_id>", methods=["GET", "POST"])
-def chat(session_id):
+def chat(session_id: str) -> Any:
     if request.method == "GET":
         conv = storage.load(session_id)
         history = []
@@ -53,7 +54,7 @@ def chat(session_id):
     # 2. Add user message
     conv.add_message(Message(role="user", content=user_content))
 
-    def generate():
+    def generate() -> Iterator[str]:
         full_response = ""
         try:
             for chunk in default_agent.generate_stream(conv):
