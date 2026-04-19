@@ -1,0 +1,68 @@
+services:
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8001:80"
+    depends_on:
+      - web
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434/api/chat
+      - PROMETHEUS_MULTIPROC_DIR=/tmp
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  worker:
+    build: .
+    command: celery -A src.agent_engine.core.celery_app worker --loglevel=info -Q agent_queue
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434/api/chat
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - redis
+      - web
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus
+    container_name: agent_engine_prometheus
+    volumes:
+      - ./infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9091:9090"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./infrastructure/grafana/grafana.ini:/etc/grafana/grafana.ini
+    depends_on:
+      - prometheus
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    restart: unless-stopped

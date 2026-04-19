@@ -17,6 +17,7 @@ This engine is designed to handle message state, token limits, and AI conversati
 * **Database:** SQLite (Local) via SQLAlchemy ORM
 * **Migrations:** Alembic
 * **Task/Message Queue:** Redis, Celery
+* **Containerization:** Docker & Docker Compose
 
 ### API Endpoints
 
@@ -87,6 +88,8 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   └── test_agent.py                    # Unit tests for the agent
 │   
 ├── logs/                                # Logs for the engine
+│   ├── pytest_run.log                   # This file will be created automaticlly when the tests are run
+│   └── test_report.txt                  # covrage report 
 │
 ├── infrastructure/                      # Infrastructure components 
 │   ├── grafana/                         # Grafana 
@@ -96,14 +99,75 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   └── prometheus/                      # Prometheus 
 │       └── prometheus.yml               # Prometheus configuration
 │
+├── Dockerfile                           # Dockerfile for the application
+├── docker-compose.yml                   # Docker Compose for the application
 ├── .env.example                         # Example environment variables
 ├── .gitignore                           # Git ignore file
 ├── README.md                            # Project documentation
 ├── requirments.txt                      # Environmented dependencies
 ├── Makefile                             # Makefile for common tasks
+├── pyproject.toml                       # Project configuration (Tools settings (Black, Ruff, MyPy))
+├── alembic.ini                          # Alembic configuration (This file will be created automaticlly when the make alembic-init are run)
 └── LICENSE                              # License file
 ```
 # Getting started
+
+# 0. Docker setup 
+* 1- **You need to download Docker desktop via this link** : https://www.docker.com/products/docker-desktop/
+**Then sign in with your docker account**
+* 2- **Access WSL integration in docker desktop (for windows 11)** : 
+go to settings -> resources -> WSL integration -> enable WSL integration
+![alt text](<Screenshot (272).png>)
+* 3- **Apply and restart docker desktop**
+* 4- **Now open wsl and you can check for docker version by running** `docker compose version`
+
+# 2. Environment Setup:
+* I use standard python virtual environment (`.venv`) and a `Makefile` to manage the development workflow.
+
+## clone the repo
+```Bash
+git clone <repo-url>
+cd new_test_agent_engine
+```
+# Initialize the virtual environment
+```Bash
+make setup
+```
+### 2.Configure the environment variables
+* Create a `.env` file in the root directory and add the following variables:
+```Bash
+APP_NAME=agent_engine
+APP_VERSION=1.0.0
+ENVIRONMENT=development
+OPENAI_API_KEY=your_openai_api_key
+```
+
+
+### 4.Testing & Code Quality
+* Run all tests with coverage report
+```Bash
+make test
+```
+* Auto-format code using ruff
+```Bash
+make format
+```
+* Check for linting errors without fixing
+```Bash
+make lint
+```
+* Run static type checking using mypy
+```Bash
+make type-check
+```
+* The Ultimate Check: Format -> Type Check -> Test
+```Bash
+make check
+```
+* Output: Results will be printed to the terminal.
+* Logs: Detailed execution logs will be appended to logs/pytest_run.log.
+* Coverage Report: A full text report will be generated at logs/test_report.txt.
+
 ## clone the repo
 ```Bash
 git clone https://github.com/AhmedSalah309/AI_AGENT_ENGINE_FROM_SCRATCH.git
@@ -195,7 +259,7 @@ make run
    - Manages the conversation flow and interacts with the LLM.
    - Handles streaming responses and token management.
    # Note:
-* More components like summarization, tool calling, memory, etc. are under development.
+* tool registry,Prompt builder, RAG, Vector DB and docker(test) are under development.
 
 
 

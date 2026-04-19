@@ -217,3 +217,16 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+# Alembic
+alembic.ini
+
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+logs/*.log
+!logs/.gitkeep
