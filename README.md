@@ -1,3 +1,14 @@
+table of contents:
+- [AI_AGENT_ENGINE_FROM_SCRATCH](#ai_agent_engine_from_scratch)
+- [Tech Stack](#tech-stack)
+- [API Endpoints](#api-endpoints)
+- [Ports & Networking Stack](#ports--networking-stack)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Getting started](#getting-started)
+- [Core Components (Current Scope)](#core-components-current-scope)
+- [Troubleshooting](#troubleshooting)
+
 # AI_AGENT_ENGINE_FROM_SCRATCH
 End-To-End robust enterprise-grade GenAI Agent Engine built from scratch [No Langchain or Llamaindex] for Generative AI applications. 
 This engine is designed to handle message state, token limits, and AI conversational flow with strict data validation. 
@@ -110,99 +121,81 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 ├── alembic.ini                          # Alembic configuration (This file will be created automaticlly when the make alembic-init are run)
 └── LICENSE                              # License file
 ```
-# Getting started
+# Prerequisites
+## 1- WSL (Windows Subsystem for Linux)
+#### 1.1 You need to download WSL by running this command in powershell : `wsl --install`
+#### 1.2 Set it to wsl2 by running this command in powershell : `wsl --set-default-version 2`
+#### 1.3 Make sure it is wsl2 by running this command in powershell : `wsl --version`
+#### 1.4 Install a specific distribution of linux (ubuntu) by running this command in powershell : `wsl --install -d ubuntu`
+#### 1.5 Open start menu and search for ubuntu and open it
+* **Note : At the first time it will ask you to create a username and password. and this password will be used to run any command with sudo (administrator) privileges.**
+If you forgot linux password please click : [Troubleshooting](#Troubleshooting--forgot-linux-password)
+#### 1.6 Update and upgrade the linux system by running the following command in ubuntu terminal:
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+#### 1.7 to open your project folder in wsl you can use the following command:
+```bash
+cd /Your project folder path
+```
+#### 1.8 to open vscode or antigravity or cursor in wsl you can use the following command:
+```bash
+code .
+```
+```bash
+antigravity .
+```
+```bash
+cursor .
+```
+#### 1.9 finally to make sure that you have installed wsl2 correctly you can run the following command:
+```bash
+uname -a
+```
+**Output should be like this (the name of the computer and the version of the kernel may be different):**
+```
+Linux DESKTOP-Q79ANCI 6.6.87.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+```
+* finally you have alot of terminals to use and we are going to use ubuntu terminal for the rest of the project.
+![alt text](<Screenshot (273).png>)
 
-# 0. Docker setup 
-* 1- **You need to download Docker desktop via this link** : https://www.docker.com/products/docker-desktop/
-**Then sign in with your docker account**
-* 2- **Access WSL integration in docker desktop (for windows 11)** : 
+## 2- Docker setup 
+#### 2.1- **You need to download Docker desktop via this link** : https://www.docker.com/products/docker-desktop/
+* Then sign in with your docker account
+#### 2.2- Access WSL integration in docker desktop (for windows 11) : 
 go to settings -> resources -> WSL integration -> enable WSL integration
 ![alt text](<Screenshot (272).png>)
-* 3- **Apply and restart docker desktop**
-* 4- **Now open wsl and you can check for docker version by running** `docker compose version`
+#### 2.3- Apply and restart docker desktop
+#### 2.4- Now open wsl and you can check for docker version by running `docker compose version`
 
-# 2. Environment Setup:
-* I use standard python virtual environment (`.venv`) and a `Makefile` to manage the development workflow.
-
-## clone the repo
-```Bash
-git clone <repo-url>
-cd new_test_agent_engine
+## 3- make setup
+* The most efficient way to install make on a WSL (Ubuntu) system is by installing the build-essential package, which includes make, gcc, and other necessary compilation tools:
+```bash
+sudo apt install build-essential
 ```
-# Initialize the virtual environment
-```Bash
-make setup
+* Alternatively, if you only want make, you can run:
+```bash
+sudo apt install make
 ```
-### 2.Configure the environment variables
-* Create a `.env` file in the root directory and add the following variables:
-```Bash
-APP_NAME=agent_engine
-APP_VERSION=1.0.0
-ENVIRONMENT=development
-OPENAI_API_KEY=your_openai_api_key
+* Verify the Installation
+Check that make is installed correctly by running:
+```bash
+make --version
 ```
 
-
-### 4.Testing & Code Quality
-* Run all tests with coverage report
-```Bash
-make test
-```
-* Auto-format code using ruff
-```Bash
-make format
-```
-* Check for linting errors without fixing
-```Bash
-make lint
-```
-* Run static type checking using mypy
-```Bash
-make type-check
-```
-* The Ultimate Check: Format -> Type Check -> Test
-```Bash
-make check
-```
-* Output: Results will be printed to the terminal.
-* Logs: Detailed execution logs will be appended to logs/pytest_run.log.
-* Coverage Report: A full text report will be generated at logs/test_report.txt.
-
-## clone the repo
-```Bash
-git clone https://github.com/AhmedSalah309/AI_AGENT_ENGINE_FROM_SCRATCH.git
-cd AI_AGENT_ENGINE_FROM_SCRATCH
-```
-
-# 1. Local AI Model Setup (Prerequisite)
+# 4- ollama setup
 * **Since this project uses a local LLM (Google Gemma:2b)** : you need to set up the ollama environment first inside your WSL environment.
-* **1. Install Ollama in WSL**
+* **4.1 Install Ollama in WSL**
 Run the following command in your WSL terminal:
 ```Bash
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 - **Note on permission:** when prompted for `[sudo] password`, enter your Linux user password.
-
-* **Troubleshooting : Forgot Linux password?**
-if you don't know your linux password, follow these steps in **Windows PowerShell** (not WSL):
-1. **close all WSL terminals**
-2. **open PowerShell as administrator and set the default user to root:**
-```powershell
-wsl -u root
-```
-3. **Inside the root terminal, run the following command to reset the password:**
-```bash
-passwd <your-wsl-username>
-```
-4. **Exit and set the default user back(optional):**
-```bash
-wsl --set-default-user <your-username>
-```
-* **5. Download & Run Gemma 2B Model**
+* **4.2 Download & Run Gemma 2B Model**
 ```bash
 ollama run gemma:2b # I used this model, you can use any other model like (llama3,mistral,phi3,etc)
 ```
-* The first time you run this command, it will take some time to download the model it depends on your internet speed and the model size.
+* **Note :** The first time you run this command, it will take some time to download the model it depends on your internet speed and the model size.
 * **To exit the model interface** : Type `/bye` and press `Enter`.
 * **To stop the ollama service** : it will run in the background.if you need to stop it,but you can still use it in the background, run the following command:
 ```bash
@@ -221,16 +214,55 @@ sudo systemctl stop ollama
 sudo systemctl start ollama
 ```
 
-### 3.Running the Server
+# Getting started
+
+## 1- clone the repo
+```Bash
+git clone https://github.com/AhmedSalah309/AI_AGENT_ENGINE_FROM_SCRATCH.git
+```
+Then :
+```Bash
+cd AI_AGENT_ENGINE_FROM_SCRATCH
+```
+## 2- setup the environment
+* I use standard python virtual environment (`.venv`) and a `Makefile` to manage the development workflow.
+```Bash
+make setup
+```
+## 3- Running the Server
 * Start the Flask development server with auto reload
 ```Bash
-make run
+make run-dev
 ```
-* The server will be live at `http://localhost:8000`
-* Health check endpoint: `http://localhost:8000/health`
-* Chat endpoint: `http://localhost:8000/api/v1/chat/test_session`
-* Swagger UI: `http://localhost:8000/apidocs`
+* The server will be live at `http://localhost:8002`
+* Health check endpoint: `http://localhost:8002/health`
+* Chat endpoint: `http://localhost:8002/api/v1/chat/test_session`
+* Swagger UI: `http://localhost:8002/apidocs`
 
+## 4- Build the Docker image
+```Bash
+make docker-build
+```
+## 5- Run the Docker container
+```Bash
+make docker-up
+```
+
+## Troubleshooting : Forgot Linux password?
+if you don't know your linux password, follow these steps in **Windows PowerShell** (not WSL):
+* **close all WSL terminals**
+* **open PowerShell as administrator and set the default user to root:**
+```powershell
+wsl -u root
+```
+* **Inside the root terminal, run the following command to reset the password:**
+```bash
+passwd <your-wsl-username>
+```
+* **Exit and set the default user back(optional):**
+```bash
+wsl --set-default-user <your-username>
+```
 
 ## Core Components (Current Scope)
 1. **`Message` Model (`src/agent_engine/core/message.py`)**
