@@ -86,15 +86,20 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   │   │   │   ├── agent_config.py          # Agent config
 │   │   │   │   └── agent_executor.py        # Agent executor
 │   │   │   │
+│   │   │   ├── memory/                      # Memory components
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── memory_interface.py      # Memory interface
+│   │   │   │   └── short_term_memory.py     # Short term memory
+│   │   │   │
 │   │   │   ├── summarizer.py                # Summarizer component
 │   │   │   ├── token_manager.py             # Token manager component
 │   │   │   ├── agent.py                     # Agent component
 │   │   │   ├── celery_app.py                # Celery Application
 │   │   │   └── tasks.py                     # Celery Tasks
-│   │   │   
-│   │   ├── database/                    # Database Layer 
+│   │   │  
+│   │   ├── database/                        # Database Layer 
 │   │   │   ├── __init__.py
-│   │   │   ├── models.py                # Database Models (Tables)
+│   │   │   ├── models.py                    # Database Models (Tables)
 │   │   │   ├── session.py               # Database connection
 │   │   │   └── sql_repository.py        # SQL Repository (file storage)
 │   │   │
@@ -291,17 +296,21 @@ wsl --set-default-user <your-username>
    - **`agent_config.py`**: Agent config.
    - **`agent_executor.py`**: Agent executor.
 
-3. **`TokenManager` Model (`src/agent_engine/core/token_manager.py`)**
+3. **`memory` The Memory of the engine (`src/agent_engine/core/memory/`)**
+   - **`memory_interface.py`**: Memory interface.
+   - **`short_term_memory.py`**: Short term memory.
+
+4. **`TokenManager` Model (`src/agent_engine/core/token_manager.py`)**
    - The Token Manager of the engine.
    - Manages the token counting and token management.
    - Handles token estimation and token validation.
 
-4. **`Summarizer` Model (`src/agent_engine/core/summarizer.py`)**
+5. **`Summarizer` Model (`src/agent_engine/core/summarizer.py`)**
    - The Summarizer of the engine.
    - Manages the summarization and token management.
    - Handles summarization estimation and summarization validation.
 
-5. **`Agent` Model (`src/agent_engine/core/agent.py`)**
+6. **`Agent` Model (`src/agent_engine/core/agent.py`)**
    - The Brain of the engine.
    - Manages the conversation flow and interacts with the LLM.
    - Handles streaming responses and token management.
