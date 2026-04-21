@@ -71,13 +71,18 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   │   │
 │   │   ├── core/                        # Core components of the engine
 │   │   │   ├── __init__.py
-│   │   │   ├── message.py               # Message model
-│   │   │   ├── conversation.py          # Conversation manager
-│   │   │   ├── summarizer.py            # Summarizer component
-│   │   │   ├── token_manager.py         # Token manager component
-│   │   │   ├── agent.py                 # Agent component
-│   │   │   ├── celery_app.py            # Celery Application
-│   │   │   └── tasks.py                 # Celery Tasks
+│   │   │   ├── brain/                       # Brain components
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── message.py               # Message model
+│   │   │   │   ├── message_metadata.py      # Message metadata
+│   │   │   │   ├── conversation.py          # Conversation model
+│   │   │   │   ├── conversation_state.py    # Conversation state
+│   │   │   │   └── conversation_manager.py  # Conversation manager component
+│   │   │   ├── summarizer.py                # Summarizer component
+│   │   │   ├── token_manager.py             # Token manager component
+│   │   │   ├── agent.py                     # Agent component
+│   │   │   ├── celery_app.py                # Celery Application
+│   │   │   └── tasks.py                     # Celery Tasks
 │   │   │   
 │   │   ├── database/                    # Database Layer 
 │   │   │   ├── __init__.py
@@ -265,28 +270,24 @@ wsl --set-default-user <your-username>
 ```
 
 ## Core Components (Current Scope)
-1. **`Message` Model (`src/agent_engine/core/message.py`)**
-   - The atomic unit of the engine.
-   - Strictly validates roles (`system`, `user`, `assistant`, `tool`).
-   - Prevents empty payloads and manages token metadata immutably.
+1. **`brain` The Brain of the engine (`src/agent_engine/core/brain/`)**
+   - **`message.py`**: The atomic unit of the engine.
+   - **`message_metadata.py`**: Message metadata.
+   - **`conversation.py`**: Conversation model.
+   - **`conversation_state.py`**: Conversation state.
+   - **`conversation_manager.py`**: Conversation manager.
 
-2. **`Conversation` Manager (`src/agent_engine/core/conversation.py`)**
-   - Acts as the State Manager for the AI Agent.
-   - **Sliding Window Algorithm:** Automatically enforces token budgets (`max_tokens`) by evicting the oldest messages when limits are reached.
-   - **System Prompt Protection:** Guarantees that `index 0` (if acting as the system prompt) is never evicted during context trimming, preventing "persona loss".
-   - **LLM Payload Export:** Cleans and formats internal state into standardized `[{"role": "...", "content": "..."}]` structures ready for OpenAI/Anthropic APIs.
-
-3. **`TokenManager` Model (`src/agent_engine/core/token_manager.py`)**
+2. **`TokenManager` Model (`src/agent_engine/core/token_manager.py`)**
    - The Token Manager of the engine.
    - Manages the token counting and token management.
    - Handles token estimation and token validation.
 
-4. **`Summarizer` Model (`src/agent_engine/core/summarizer.py`)**
+3. **`Summarizer` Model (`src/agent_engine/core/summarizer.py`)**
    - The Summarizer of the engine.
    - Manages the summarization and token management.
    - Handles summarization estimation and summarization validation.
 
-5. **`Agent` Model (`src/agent_engine/core/agent.py`)**
+4. **`Agent` Model (`src/agent_engine/core/agent.py`)**
    - The Brain of the engine.
    - Manages the conversation flow and interacts with the LLM.
    - Handles streaming responses and token management.
