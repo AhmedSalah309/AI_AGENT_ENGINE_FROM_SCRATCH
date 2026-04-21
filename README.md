@@ -78,6 +78,14 @@ AI_AGENT_ENGINE_FROM_SCRATCH/
 │   │   │   │   ├── conversation.py          # Conversation model
 │   │   │   │   ├── conversation_state.py    # Conversation state
 │   │   │   │   └── conversation_manager.py  # Conversation manager component
+│   │   │   │
+│   │   │   ├──agent/                        # Agent components
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── agent.py                 # Agent model
+│   │   │   │   ├── agent_state.py           # Agent state
+│   │   │   │   ├── agent_config.py          # Agent config
+│   │   │   │   └── agent_executor.py        # Agent executor
+│   │   │   │
 │   │   │   ├── summarizer.py                # Summarizer component
 │   │   │   ├── token_manager.py             # Token manager component
 │   │   │   ├── agent.py                     # Agent component
@@ -277,17 +285,23 @@ wsl --set-default-user <your-username>
    - **`conversation_state.py`**: Conversation state.
    - **`conversation_manager.py`**: Conversation manager.
 
-2. **`TokenManager` Model (`src/agent_engine/core/token_manager.py`)**
+2. **`agent` The Agent of the engine (`src/agent_engine/core/agent/`)**
+   - **`agent.py`**: Agent model.
+   - **`agent_state.py`**: Agent state.
+   - **`agent_config.py`**: Agent config.
+   - **`agent_executor.py`**: Agent executor.
+
+3. **`TokenManager` Model (`src/agent_engine/core/token_manager.py`)**
    - The Token Manager of the engine.
    - Manages the token counting and token management.
    - Handles token estimation and token validation.
 
-3. **`Summarizer` Model (`src/agent_engine/core/summarizer.py`)**
+4. **`Summarizer` Model (`src/agent_engine/core/summarizer.py`)**
    - The Summarizer of the engine.
    - Manages the summarization and token management.
    - Handles summarization estimation and summarization validation.
 
-4. **`Agent` Model (`src/agent_engine/core/agent.py`)**
+5. **`Agent` Model (`src/agent_engine/core/agent.py`)**
    - The Brain of the engine.
    - Manages the conversation flow and interacts with the LLM.
    - Handles streaming responses and token management.
