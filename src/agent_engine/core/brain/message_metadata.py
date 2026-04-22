@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from typing import Optional, Any
 from pydantic import BaseModel, Field, ConfigDict
 
 
@@ -21,13 +21,14 @@ class MessageMetadata(BaseModel):
     
     model: Optional[str] = Field(default=None)
     
-    tool_calls: List[Dict[str, Any]] = Field(default_factory=list)
+    tool_calls: list[dict[str, Any]] = Field(default_factory=list)
 
     source: Optional[str] = Field(default=None)
     
     from_cache: bool = Field(default=False)
     
-    extra: Dict[str, Any] = Field(default_factory=dict)
+    extra: dict[str, Any] = Field(default_factory=dict)
+   
     
     model_config = ConfigDict(
         frozen = True,
