@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional
 from uuid import UUID
 from abc import ABC, abstractmethod
+from datetime import datetime, timezone
 
 from conversation import Conversation
 from message import Message
@@ -79,7 +80,7 @@ class InMemoryConversationManager(ConversationManager):
         if not conversation:
             raise ValueError(f"Conversation {conversation_id} not found")
         conversation.state = state
-        conversation.updated_at = datetime.utcnow()
+        conversation.updated_at = datetime.now(timezone.utc)
         self.save(conversation)
     
     def list_by_user(self, user_id: str, limit: int = 50, offset: int = 0) -> List[Conversation]:

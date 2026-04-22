@@ -1,8 +1,8 @@
 import logging
-from datetime import datetime
-from typing import List, Optional
+from datetime import datetime, timezone
+from typing import Optional, Any
 from uuid import UUID, uuid4
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 from message import Message
 from conversation_state import ConversationState
@@ -14,17 +14,17 @@ class Conversation(BaseModel):
     
     user_id: str = Field(..., min_length=1)
     
-    messages: List[Message] = Field(default_factory=list)
+    messages: list[Message] = Field(default_factory=list)
     
     state: ConversationState = Field(default_factory=ConversationState)
     
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
     title: Optional[str] = Field(default=None)
     
-    metadata: dict = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
     
     @field_validator('user_id')
     @classmethod
@@ -35,14 +35,14 @@ class Conversation(BaseModel):
     
     def add_message(self, message: Message) -> None:
         self.messages.append(message)
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
     
     def get_last_message(self) -> Optional[Message]:
         if not self.messages:
             return None
         return self.messages[-1]
     
-    def get_messages_by_role(self, role: str) -> List[Message]:
+    def get_messages_by_role(self, role: str) -> list[Message]:
         return [msg for msg in self.messages if msg.role == role]
     
     def get_message_count(self) -> int:

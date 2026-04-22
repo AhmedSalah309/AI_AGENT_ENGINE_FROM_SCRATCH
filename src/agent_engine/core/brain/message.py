@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from uuid import uuid4, UUID
 from pydantic import BaseModel, Field, field_validator, ConfigDict
@@ -23,7 +23,7 @@ class Message(BaseModel):
         max_length=settings.MESSAGE_MAX_LENGTH
     )
     
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
     metadata: MessageMetadata = Field(default_factory=MessageMetadata)
     
