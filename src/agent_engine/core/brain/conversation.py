@@ -36,13 +36,18 @@ class Conversation(BaseModel):
     def add_message(self, message: Message) -> None:
         self.messages.append(message)
         self.updated_at = datetime.now(timezone.utc)
+
+    def generate_title(self):
+        if not self.messages:
+            return "New Chat"
+        return self.messages[0].content[:50]
     
     def get_last_message(self) -> Optional[Message]:
         if not self.messages:
             return None
         return self.messages[-1]
     
-    def get_messages_by_role(self, role: str) -> list[Message]:
+    def get_messages_by_role(self, role: Role) -> list[Message]:
         return [msg for msg in self.messages if msg.role == role]
     
     def get_message_count(self) -> int:
