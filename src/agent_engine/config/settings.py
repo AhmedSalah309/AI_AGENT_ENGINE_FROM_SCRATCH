@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     ENVIRONMENT: Literal["development", "production", "testing"] = "development"
     DEBUG_MODE: bool = True
 
+    # message conig
+    MESSAGE_MIN_LENGTH: int = 1
+    MESSAGE_MAX_LENGTH: int = 10000
+
     # LLM Settings
     OLLAMA_BASE_URL: str = "http://ollama:11434/api/chat"
     DEFAULT_MODEL: str = "gemma:2b"
