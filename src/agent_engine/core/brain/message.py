@@ -4,7 +4,8 @@ from enum import Enum
 from uuid import uuid4, UUID
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 
-from message_metadata import MessageMetadata
+from src.agent_engine.settings import settings
+from src.agent_engine.core.brain.message_metadata import MessageMetadata
 
 class Role(str, Enum):
     USER = "user"
@@ -37,6 +38,7 @@ class Message(BaseModel):
     
     model_config = ConfigDict(
         frozen = True,
+        use_enum_values=True,
         json_encoders = {
             datetime: lambda v: v.isoformat(),
             UUID: lambda v: str(v)

@@ -35,7 +35,7 @@ class Conversation(BaseModel):
     
     def add_message(self, message: Message) -> None:
         self.messages.append(message)
-        self.updated_at = datetime.now(timezone.utc)
+        object.__setattr__(self, "updated_at", datetime.now(timezone.utc))
 
     def generate_title(self):
         if not self.messages:
@@ -54,7 +54,9 @@ class Conversation(BaseModel):
         return len(self.messages)
     
     model_config = ConfigDict(
+        frozen = True,
         json_encoders = {
             datetime: lambda v: v.isoformat(),
             UUID: lambda v: str(v)
-        })
+        }
+    )

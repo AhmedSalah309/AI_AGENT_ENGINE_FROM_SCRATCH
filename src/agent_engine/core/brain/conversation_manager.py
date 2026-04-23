@@ -2,10 +2,12 @@ from typing import Dict, List, Optional
 from uuid import UUID
 from abc import ABC, abstractmethod
 from datetime import datetime, timezone
+from threading import Lock
 
 from conversation import Conversation
 from message import Message
 from conversation_state import ConversationState
+
 
 
 class ConversationManager(ABC):
@@ -46,34 +48,36 @@ class ConversationManager(ABC):
 class InMemoryConversationManager(ConversationManager):
     
     def __init__(self):
-        self._storage: Dict[UUID, Conversation] = {}
+        self._storage: dict[UUID, Conversation] = {}
+        self._lock = Lock()
     
     def create(self, user_id: str, title: Optional[str] = None) -> Conversation:
-        conversation = Conversation(
-            user_id=user_id,
-            title=title
-        )
-        self._storage[conversation.id] = conversation
+        conversation = Conversation(user_id=user_id, title=title)
+        with self._lock:
+            self._storage[conversation.id] = conversation
         return conversation
     
-    def get(self, conversation_id: UUID) -> Optional[Conversation]:
-        return self._storage.get(conversation_id)
+    def get(self, conversation_id: UUID) -> Conversation:
+        with self._lock:
+            conversation = self._storage.get(conversation_id)
+        return conversation
     
     def save(self, conversation: Conversation) -> None:
         self._storage[conversation.id] = conversation
     
     def delete(self, conversation_id: UUID) -> bool:
-        if conversation_id in self._storage:
-            del self._storage[conversation_id]
-            return True
+        with self._lock:
+            if conversation_id in self._storage:
+                del self._storage[conversation_id]
+                return True
         return False
     
     def add_message(self, conversation_id: UUID, message: Message) -> None:
-        conversation = self.get(conversation_id)
-        if not conversation:
-            raise ValueError(f"Conversation {conversation_id} not found")
-        conversation.add_message(message)
-        self.save(conversation)
+        with self._lock:
+            conversation = self._storage.get(conversation_id)
+            if not conversation:
+                raise ValueError("Conversation not found")
+            conversation.add_message(message)
     
     def update_state(self, conversation_id: UUID, state: ConversationState) -> None:
         conversation = self.get(conversation_id)
@@ -91,9 +95,13 @@ class InMemoryConversationManager(ConversationManager):
         user_conversations.sort(key=lambda x: x.updated_at, reverse=True)
         return user_conversations[offset:offset + limit]
     
-    def get_active_conversations(self, user_id: str) -> List[Conversation]:
+    def get_active_conversations(self, user_id: str) -> list[Conversation]:
         all_conversations = self.list_by_user(user_id, limit=1000)
         return [
             conv for conv in all_conversations
-            if conv.state.status in ["processing", "waiting_for_user"]
+            if conv.state.status in {
+                ConversationStatus.PROCESSING,
+                ConversationStatus.WAITING_FOR_USER
+            }
         ]
+

@@ -1,7 +1,13 @@
 from datetime import datetime, timezone
 from typing import Optional, Any
 from pydantic import BaseModel, Field, ConfigDict
+from enum import Enum
 
+class MessageSource(str, Enum):
+    USER = "user"
+    LLM = "llm"
+    TOOL = "tool"
+    CACHE = "cache"
 
 class MessageMetadata(BaseModel):
     processing_time_ms: int = Field(
@@ -23,7 +29,7 @@ class MessageMetadata(BaseModel):
     
     tool_calls: list[dict[str, Any]] = Field(default_factory=list)
 
-    source: Optional[str] = Field(default=None)
+    source: MessageSource | None = Field(default=None)
     
     from_cache: bool = Field(default=False)
     
@@ -32,6 +38,7 @@ class MessageMetadata(BaseModel):
     
     model_config = ConfigDict(
         frozen = True,
+        use_enum_values=True,
         json_encoders = {
             datetime: lambda v: v.isoformat()
         })
